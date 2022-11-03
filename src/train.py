@@ -21,6 +21,7 @@ from sklearn.model_selection import train_test_split
 
 import mlflow
 from mlflow.tracking import MlflowClient
+mlflow.set_tracking_uri("sqlite:///mydb.sqlite")
 EXPERIMENT_NAME = "IBM_Employee_Attrition_Prediciton"
 mlflow.set_experiment(EXPERIMENT_NAME)
 
@@ -120,6 +121,13 @@ def train_pipeline():
         mlflow.log_metric("Accuracy", accuracy_Score)
         mlflow.log_metric("ROC_AUC_score", ROC_AUC_Score)
         mlflow.log_artifact(local_path="models", artifact_path="models/pipe")
+
+
+        mlflow.sklearn.log_model(
+            sk_model=pipe,
+            artifact_path="models/logreg_pipe",
+            registered_model_name="scikit-learn-Logistic_Regression",
+        )
 
     return pipe
 
