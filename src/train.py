@@ -45,7 +45,33 @@ def csv_to_df() -> pd.DataFrame:
 
 
 
+def split_data(df: pd.DataFrame):
 
+    """
+    Split the dataframe into train and test set
+    Args:
+        pd.DataFrame: Pandas dataframe
+    Returns:
+        X_train: Features train set
+        y_train: Target train set 
+        X_test: Features test set
+        y_test: Target test set
+    """
+
+    X = df.drop("Attrition",axis=1)
+    y= df["Attrition"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X,
+                                                    y,
+                                                    test_size=0.30,
+                                                    random_state=42,
+                                                    stratify=y)  
+
+    X_train.to_csv(r'../data/X_train.csv')
+    y_train.to_csv(r'../data/y_train.csv')
+    X_test.to_csv(r'../data/X_test.csv')
+    y_test.to_csv(r'../data/y_test.csv')
+    # return X_train, X_test, y_train, y_test
 
 
 
@@ -61,5 +87,7 @@ if __name__ == "__main__":
     df = csv_to_df()
 
     df.to_csv(r'../data/prepared_df.csv')
+    split_data(df)
+    
 
     print("Script running fine") 
