@@ -16,8 +16,8 @@ from sklearn.compose import make_column_transformer
 from sklearn.model_selection import train_test_split
 
 
-# from prefect import flow, task
-# from prefect.task_runners import SequentialTaskRunner
+from prefect import flow, task
+from prefect.task_runners import SequentialTaskRunner
 
 import mlflow
 from mlflow.tracking import MlflowClient
@@ -26,6 +26,7 @@ EXPERIMENT_NAME = "IBM_Employee_Attrition_Prediciton"
 mlflow.set_experiment(EXPERIMENT_NAME)
 
 
+@task(name="CSV_to_Dataframe", retries=3)
 def csv_to_df() -> pd.DataFrame:
 
     """
@@ -47,7 +48,7 @@ def csv_to_df() -> pd.DataFrame:
     return df
 
 
-
+@task(name="Train_Test_Spliting ", retries=3)
 def split_data(df: pd.DataFrame):
 
     """
@@ -77,6 +78,7 @@ def split_data(df: pd.DataFrame):
     return X_train, X_test, y_train, y_test
 
 
+@flow(name="Training_Pipeline ML Model")#,task_runner=SequentialTaskRunner())
 def train_pipeline():
     """
     Pipeline to transform data and train the model
@@ -143,11 +145,8 @@ def train_pipeline():
 
 if __name__ == "__main__":
 
-    df = csv_to_df()
+    trained_pipe = train_pipeline()
 
-    # df.to_csv(r'../data/prepared_df.csv')
-    split_data(df)
-    train_pipeline()
-
-
-    print("Script running fine") 
+    with open("models/pipe.pkl", "wb") as f:
+        pickle.dump(trained_pipe, f)
+    print("Completed: Model pipeline trained and saved")
