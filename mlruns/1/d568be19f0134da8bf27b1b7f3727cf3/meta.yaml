@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/DEEPANSHU/Folder001/Git_Projects/MLOps/IBM_Employee_Attrition_Prediciton/mlruns/1/d568be19f0134da8bf27b1b7f3727cf3/artifacts
+end_time: 1667487908744
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: d568be19f0134da8bf27b1b7f3727cf3
+run_name: peaceful-perch-386
+run_uuid: d568be19f0134da8bf27b1b7f3727cf3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667487908268
+status: 3
+tags: []
+user_id: DEEPANSHU

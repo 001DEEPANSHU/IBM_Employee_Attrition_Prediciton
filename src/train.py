@@ -5,7 +5,8 @@ import random
 import numpy as np
 import pandas as pd
 
-from sklearn.metrics import f1_score, recall_score, accuracy_score, precision_score
+from sklearn.metrics import f1_score, recall_score, accuracy_score, precision_score, roc_auc_score
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder
@@ -18,9 +19,10 @@ from sklearn.model_selection import train_test_split
 # from prefect import flow, task
 # from prefect.task_runners import SequentialTaskRunner
 
-# import mlflow
-# from mlflow.tracking import MlflowClient
-
+import mlflow
+from mlflow.tracking import MlflowClient
+EXPERIMENT_NAME = "IBM_Employee_Attrition_Prediciton"
+mlflow.set_experiment(EXPERIMENT_NAME)
 
 
 def csv_to_df() -> pd.DataFrame:
@@ -36,7 +38,7 @@ def csv_to_df() -> pd.DataFrame:
     # print(df.shape)
     # Drop the unnecessary columns
 
-    df.drop(['Over18','EmployeeCount', 'EmployeeNumber', 'StandardHours'], axis="columns", inplace=True)
+    df.drop(['OverTime','Over18','EmployeeCount', 'EmployeeNumber', 'StandardHours'], axis="columns", inplace=True)
     
     # print("After dropping")
     # print(df.shape)
@@ -67,11 +69,60 @@ def split_data(df: pd.DataFrame):
                                                     random_state=42,
                                                     stratify=y)  
 
-    X_train.to_csv(r'../data/X_train.csv')
-    y_train.to_csv(r'../data/y_train.csv')
-    X_test.to_csv(r'../data/X_test.csv')
-    y_test.to_csv(r'../data/y_test.csv')
-    # return X_train, X_test, y_train, y_test
+    # X_train.to_csv(r'../data/X_train.csv')
+    # y_train.to_csv(r'../data/y_train.csv')
+    # X_test.to_csv(r'../data/X_test.csv')
+    # y_test.to_csv(r'../data/y_test.csv')
+    return X_train, X_test, y_train, y_test
+
+
+def train_pipeline():
+    """
+    Pipeline to transform data and train the model
+    Returns:
+        None 
+    """
+
+    df = csv_to_df()
+    X_train, X_test, y_train, y_test = split_data(df)
+
+    ohe_encoder = OneHotEncoder()
+    ord_encoder = OrdinalEncoder()
+
+    ct = make_column_transformer( 
+            (ord_encoder,["BusinessTravel"]),
+            (ohe_encoder, ["Department","EducationField", "Gender","JobRole", "MaritalStatus"]),
+            remainder = 'passthrough')
+    
+    pipe = Pipeline([
+    ('Column_Transformations', ct),
+    ('Logistic Regression', LogisticRegression()),
+    ])
+
+
+    with mlflow.start_run():
+        
+        mlflow.set_tag("Author", "Deepanshu Kaushik")
+        mlflow.set_tag("Model", "Logistic_Regression")
+        
+
+
+        pipe.fit(X_train, y_train)
+        y_pred = pipe.predict(X_test)
+        accuracy_Score = accuracy_score(y_test, y_pred)
+        print(accuracy_Score)
+        y_pred = pipe.predict_proba(X_test)[:,1]
+        ROC_AUC_Score = roc_auc_score(y_test, y_pred)
+        print(ROC_AUC_Score)
+        
+        
+
+        mlflow.log_metric("Accuracy", accuracy_Score)
+        mlflow.log_metric("ROC_AUC_score", ROC_AUC_Score)
+        mlflow.log_artifact(local_path="models", artifact_path="models/pipe")
+
+    return pipe
+
 
 
 
@@ -86,8 +137,9 @@ if __name__ == "__main__":
 
     df = csv_to_df()
 
-    df.to_csv(r'../data/prepared_df.csv')
+    # df.to_csv(r'../data/prepared_df.csv')
     split_data(df)
-    
+    train_pipeline()
+
 
     print("Script running fine") 

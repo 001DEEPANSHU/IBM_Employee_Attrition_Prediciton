@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/DEEPANSHU/Folder001/Git_Projects/MLOps/IBM_Employee_Attrition_Prediciton/mlruns/1/122ee15c8acf4e3f8fbe4bdad41d2808/artifacts
+end_time: 1667494723691
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: 122ee15c8acf4e3f8fbe4bdad41d2808
+run_name: delightful-donkey-66
+run_uuid: 122ee15c8acf4e3f8fbe4bdad41d2808
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667494719120
+status: 4
+tags: []
+user_id: DEEPANSHU

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/DEEPANSHU/Folder001/Git_Projects/MLOps/IBM_Employee_Attrition_Prediciton/mlruns/1/d352bd55d5934d118218ccb8464ccade/artifacts
+end_time: 1667494616332
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+run_id: d352bd55d5934d118218ccb8464ccade
+run_name: unique-duck-108
+run_uuid: d352bd55d5934d118218ccb8464ccade
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1667494616197
+status: 4
+tags: []
+user_id: DEEPANSHU
