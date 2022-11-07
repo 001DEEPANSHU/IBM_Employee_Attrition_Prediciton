@@ -1,5 +1,6 @@
 import pickle
 import streamlit as st
+import pandas as pd
 
 
 def load_pipeline():
@@ -50,194 +51,63 @@ MaritalStatus = col23.selectbox('Marital Status', ('Single', 'Married', 'Divorce
 col31, col32, col33 = st.columns(3)
 
 
-Age = col31.slider(    #7th feature
-    'Age',
-    min_value=18,
-    max_value=95,
-    value=30,
-)
-
-DailyRate = col32.slider(  #8th feature
-    'Daily Rate',
-    min_value=0,
-    max_value=2000,
-    value=0,
-)
-DistanceFromHome = col33.slider(   #9th feature
-    'Distance From Home',
-    min_value=0,
-    max_value=30,
-    value=0,
-)
+Age = col31.number_input("Insert Age")   #7th feature
+DailyRate = col32.number_input("Insert DailyRate") #8th feature
+DistanceFromHome = col33.number_input("Insert DistanceFromHome") #9th feature
 
 col41, col42, col43 = st.columns(3)
 
-Education = col41.slider(   #10th feature
-    'Education',
-    min_value=1,
-    max_value=5,
-    value=1,
-)
-EnvironmentSatisfaction = col42.slider(    #11th feature
-    'Enviroment Satisfaction',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
-
-HourlyRate = col43.slider(      #12th feature
-    'Hourly Rate',
-    min_value=0,
-    max_value=100,
-    value=0,
-)
-
+Education = col41.number_input("Insert Education")   #10th feature
+EnvironmentSatisfaction = col42.number_input("Insert EnvironmentSatisfaction") #11th feature
+HourlyRate = col43.number_input("Insert HourlyRate") #12th feature
 
 
 col51, col52, col53 = st.columns(3)
 
-JobInvolvement = col51.slider(    #13th feature
-    'Job Involvement',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
-JobLevel = col52.slider(         #14th feature
-    'Job Level',
-    min_value=1,
-    max_value=5,
-    value=1,
-)
-
-
-JobSatisfaction = col53.slider(    #15th feature
-    'Job Satisfaction',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
-
+JobInvolvement = col51.number_input("Insert JobInvolvement")   #13th feature
+JobLevel = col52.number_input("Insert JobLevel") #14th feature
+JobSatisfaction = col53.number_input("Insert JobSatisfaction") #15th feature
 
 
 col61, col62, col63 = st.columns(3)
 
-MonthlyIncome = col61.slider(   #16th feature
-    'Monthly Income',
-    min_value=0,
-    max_value=100000,
-    value=0,
-)
-MonthlyRate = col62.slider(     #17th feature
-    'Monthly Rate',
-    min_value=0,
-    max_value=30000,
-    value=0,
-)
-
-
-NumCompaniesWorked = col63.slider(    #18th feature
-    'Number of Companies Worked',
-    min_value=0,
-    max_value=10,
-    value=0,
-)
+MonthlyIncome = col61.number_input("Insert MonthlyIncome")   #16th feature
+MonthlyRate = col62.number_input("Insert MonthlyRate") #17th feature
+NumCompaniesWorked = col63.number_input("Insert NumCompaniesWorked") #18th feature
 
 
 
 col71, col72, col73 = st.columns(3)
 
-PercentSalaryHike = col71.slider(   #19th feature
-    'Percent Salary Hike',
-    min_value=0,
-    max_value=30000,
-    value=0,
-)
-
-
-PerformanceRating = col72.slider(    #20th feature
-    'Performance Rating',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
-
-RelationshipSatisfaction = col73.slider(  #21st feature
-    'Relationship Satisfaction',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
+PercentSalaryHike = col71.number_input("Insert PercentSalaryHike")   #19th feature
+PerformanceRating = col72.number_input("Insert PerformanceRating") #20th feature
+RelationshipSatisfaction = col73.number_input("Insert RelationshipSatisfaction") #21th feature
 
 
 col81, col82, col83 = st.columns(3)
 
-StockOptionLevel = col81.slider(    #22nd feature
-    'Stock Option Level',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
-
-
-TotalWorkingYears = col82.slider(   #23rd feature
-    'Total Working Years',
-    min_value=0,
-    max_value=50,
-    value=0,
-)
-TrainingTimesLastYear = col83.slider(   #24th feature
-    'Training Times Last Year',
-    min_value=0,
-    max_value=10,
-    value=0,
-)
-
+StockOptionLevel = col81.number_input("Insert StockOptionLevel")   #22th feature
+TotalWorkingYears = col82.number_input("Insert TotalWorkingYears") #23th feature
+TrainingTimesLastYear = col83.number_input("Insert TrainingTimesLastYear") #24th feature
 
 
 col91, col92, col93 = st.columns(3)
 
-WorkLifeBalance = col91.slider(    #25th feature
-    'Work Life Balance',
-    min_value=1,
-    max_value=4,
-    value=1,
-)
+WorkLifeBalance = col81.number_input("Insert WorkLifeBalance")   #25th feature
+YearsAtCompany = col82.number_input("Insert YearsAtCompany") #26th feature
+YearsInCurrentRole = col83.number_input("Insert YearsInCurrentRole") #27th feature
 
-
-YearsAtCompany = col92.slider(   #26th feature
-    'Years at Company',
-    min_value=0,
-    max_value=50,
-    value=0,
-)
-
-
-YearsInCurrentRole = col93.slider(   #27th feature
-    'Years in Current Role',
-    min_value=0,
-    max_value=50,
-    value=0,
-)
 
 
 col101, col102, col103 = st.columns(3)
 
-YearsSinceLastPromotion = col101.slider(    #28th feature
-    'Years Since Last Promotion',
-    min_value=0,
-    max_value=50,
-    value=0,
-)
-
-YearsWithCurrManager = col102.slider(   #29th feature
-    'Years with Current Manager',
-    min_value=0,
-    max_value=50,
-    value=0,
-)
+YearsSinceLastPromotion = col81.number_input("Insert YearsSinceLastPromotion")   #28th feature
+YearsWithCurrManager = col82.number_input("Insert YearsWithCurrManager") #29th feature
 
 
-input_data = {
+input_data = [
+
+{
     'Age': int(Age),
     'BusinessTravel': BusinessTravel,
     'DailyRate': float(DailyRate),
@@ -268,3 +138,25 @@ input_data = {
     'YearsSinceLastPromotion': int(YearsSinceLastPromotion),
     'YearsWithCurrManager': int(YearsWithCurrManager),
 }
+]
+
+input_df = pd.DataFrame(input_data)
+
+pred = pipeline.predict_proba(input_df)[0,1]
+pred = float(pred)
+print(pred)
+
+col104, col105 = st.columns(2)
+
+st.write('The input data is') 
+st.table(input_df)
+
+col104.write("Probability of Employee's attrition is:")
+
+col105.write(
+    f"""<p class="big-font">
+{pred:0.4f}
+</p>
+""",
+    unsafe_allow_html=True,
+)
