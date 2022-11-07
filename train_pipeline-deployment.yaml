@@ -1,0 +1,34 @@
+###
+### A complete description of a Prefect Deployment for flow 'Training_Pipeline ML Model'
+###
+name: Deployment
+description: "Pipeline to transform data and train the model\nReturns:\n    None "
+version: c1beff642ac1585e0bd43498e27947a6
+tags: []
+parameters: {}
+schedule: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command:
+  - python
+  - -m
+  - prefect.engine
+  stream_output: true
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: Training_Pipeline ML Model
+manifest_path: null
+storage: null
+path: /Users/DEEPANSHU/Folder001/Git_Projects/MLOps/IBM_Employee_Attrition_Prediciton
+entrypoint: train.py:train_pipeline
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties: {}
+  required: null
+  definitions: null
