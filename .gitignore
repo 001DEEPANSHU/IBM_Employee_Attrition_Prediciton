@@ -128,3 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 Imp_Commands.txt
+
+Evidently.ipynb
+train2.py
