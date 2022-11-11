@@ -19,6 +19,11 @@ from sklearn.model_selection import train_test_split
 from prefect import flow, task
 from prefect.task_runners import SequentialTaskRunner
 
+
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab
+from evidently.pipeline.column_mapping import ColumnMapping
+
 import mlflow
 from mlflow.tracking import MlflowClient
 mlflow.set_tracking_uri("sqlite:///mydb.sqlite")
@@ -65,6 +70,9 @@ def split_data(df: pd.DataFrame):
     X = df.drop("Attrition",axis=1)
     y= df["Attrition"]
 
+    categorical_features = list(X.select_dtypes(include="O").columns)
+    numerical_features = list(X.select_dtypes(include="number").columns)
+
     X_train, X_test, y_train, y_test = train_test_split(X,
                                                     y,
                                                     test_size=0.30,
@@ -75,7 +83,57 @@ def split_data(df: pd.DataFrame):
     # y_train.to_csv(r'../data/y_train.csv')
     # X_test.to_csv(r'../data/X_test.csv')
     # y_test.to_csv(r'../data/y_test.csv')
-    return X_train, X_test, y_train, y_test
+    return X_train, X_test, y_train, y_test, categorical_features, numerical_features
+
+
+
+@task(name="Performance Dashboard", retries=3)
+def performance_dashboard(X_train, y_train, X_test, y_test, numerical_features, categorical_features):
+    """
+    Fucntion to create a model performance dashboard .
+
+    Returns:
+        None
+    """
+
+    column_mapping = ColumnMapping()
+    column_mapping.target = 'Attrition'
+    column_mapping.prediction = ['yes','no']
+    column_mapping.numerical_features = numerical_features
+    column_mapping.categorical_features = categorical_features
+
+
+    with open("models/pipe.bin", "rb") as f:
+        pipe = pickle.load(f)
+
+    train_data = X_train.copy()
+    train_data.reset_index(inplace=True, drop=True)
+    train_data['Attrition'] = ['no' if x == 'No' else 'yes' for x in y_train]
+    train_probas = pd.DataFrame(pipe.predict_proba(train_data))
+    train_probas.columns = ['no', 'yes']
+    merged_train = pd.concat([train_data, train_probas], axis = 1)
+
+    test_data = X_test.copy()
+    test_data.reset_index(inplace=True, drop=True)
+    test_data['Attrition'] = ['no' if x == 'No' else 'yes' for x in y_test]
+    test_probas = pd.DataFrame(pipe.predict_proba(test_data))
+    test_probas.columns = ['no', 'yes']
+    merged_test = pd.concat([test_data, test_probas], axis = 1)
+
+    dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab()])
+    dashboard.calculate(merged_train, merged_test, column_mapping = column_mapping)
+    
+    
+    dashboard.save("evidently_dashboards/model_performance_dashboard.html")
+
+
+
+
+
+
+
+
+
 
 
 @flow(name="Training_Pipeline ML Model")#,task_runner=SequentialTaskRunner())
@@ -87,7 +145,7 @@ def train_pipeline():
     """
 
     df = csv_to_df()
-    X_train, X_test, y_train, y_test = split_data(df)
+    X_train, X_test, y_train, y_test, categorical_features, numerical_features = split_data(df)
 
     ohe_encoder = OneHotEncoder()
     ord_encoder = OrdinalEncoder()
@@ -130,6 +188,9 @@ def train_pipeline():
             artifact_path="models/logreg_pipe",
             registered_model_name="scikit-learn-Logistic_Regression",
         )
+
+
+    performance_dashboard(X_train, y_train, X_test, y_test, numerical_features, categorical_features)
 
     return pipe
 
