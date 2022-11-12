@@ -2,6 +2,18 @@ version: '3.9'
 
 services:
 
+  evidently_app:
+    build:
+      context: dashboards
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - FLASK_APP=app.py
+    volumes:
+      - ./dashboards:/app
+    restart: on-failure
+
   streamlit_app:
     build:
       context: streamlit

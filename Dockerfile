@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 
 COPY ["train.py", "./" ]
 
-CMD python model.py
+CMD python train.py
