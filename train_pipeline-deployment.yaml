@@ -3,7 +3,7 @@
 ###
 name: Deployment
 description: "Pipeline to transform data and train the model\nReturns:\n    None "
-version: c1beff642ac1585e0bd43498e27947a6
+version: 0cf277319fd63eef8fb58210dd34bcc4
 tags: []
 parameters: {}
 schedule: null
