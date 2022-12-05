@@ -1,1 +1,2 @@
-# IBM_Employee_Attrition_Prediciton
+# IBM Employee Attrition Prediciton
+Documentation: deepanshu02ibmattrition.netlify.app/home/
