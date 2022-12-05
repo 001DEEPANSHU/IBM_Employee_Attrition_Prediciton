@@ -1,0 +1,6 @@
+site_name: (In Progress) IBM Employee Attrition Prediction
+
+nav:
+    - Home: home.md
+theme:
+  name: material
